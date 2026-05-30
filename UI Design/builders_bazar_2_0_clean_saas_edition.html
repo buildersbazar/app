@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" class="light"> <!-- Default to Light Theme as per screenshots -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Builders Bazar 2.0 - Hybrid UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable class-based dark mode
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        bb: {
+                            blue: '#2563eb', // Primary Brand Blue
+                            navy: '#0f172a',
+                            gold: '#f59e0b',
+                            bgLight: '#f8fafc',
+                            bgDark: '#0f172a',
+                            cardLight: '#ffffff',
+                            cardDark: '#1e293b'
+                        }
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.3s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .app-container { max-width: 480px; margin: 0 auto; height: 100vh; position: relative; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.1); transition: background-color 0.3s ease; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse-green 1.5s infinite; }
+        @keyframes pulse-green { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+        
+        .view { display: none; height: 100%; width: 100%; flex-direction: column; }
+        .view.active { display: flex; animation: fadeIn 0.2s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Custom Scroll behavior */
+        .smooth-scroll { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+<div class="app-container flex flex-col bg-bb-bgLight dark:bg-bb-bgDark">
+
+    <!-- VIEW 1: HOME / DASHBOARD -->
+    <div id="view-home" class="view active relative z-10">
+        
+        <!-- Header -->
+        <header class="px-5 pt-12 pb-4 bg-white dark:bg-bb-cardDark border-b border-gray-100 dark:border-gray-800 flex justify-between items-center sticky top-0 z-20 transition-colors">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-bb-blue dark:text-blue-400 font-bold text-lg border border-blue-200 dark:border-blue-800">
+                    K
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Kalsi Constructions</h1>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Delhi NCR Region</p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700">
+                    <span id="theme-icon" class="text-sm">🌙</span>
+                </button>
+                <div class="w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 relative">
+                    <span class="text-sm">🔔</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto hide-scrollbar px-5 pb-28 pt-5 space-y-6 smooth-scroll">
+            
+            <!-- Value/Stats Row (Makes product understandable immediately) -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white dark:bg-bb-cardDark p-4 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Savings This Month</p>
+                    <p class="text-xl font-bold text-green-600 dark:text-green-400">₹45,200</p>
+                </div>
+                <div class="bg-white dark:bg-bb-cardDark p-4 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Active RFQs</p>
+                    <p class="text-xl font-bold text-bb-blue dark:text-blue-400">4 <span class="text-xs font-normal text-slate-400 dark:text-slate-500">Live Bids</span></p>
+                </div>
+            </div>
+
+            <!-- Express RFQ Card (Clean & Focused) -->
+            <div class="bg-white dark:bg-bb-cardDark rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors">
+                <div class="bg-blue-50 dark:bg-blue-900/20 px-4 py-3 border-b border-blue-100 dark:border-blue-800/50 flex justify-between items-center">
+                    <h2 class="text-sm font-bold text-bb-blue dark:text-blue-400 flex items-center">
+                        <span class="mr-2">⚡</span> Post New Requirement
+                    </h2>
+                </div>
+                <div class="p-4">
+                    <textarea id="rfq-input" rows="2" class="w-full bg-transparent text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 border-none outline-none resize-none text-[15px]" placeholder="Type your material requirement or tap camera for Parchi..."></textarea>
+                    
+                    <!-- AI Parsed Result Container -->
+                    <div id="ai-parsed-result" class="hidden mt-3 p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-700 dark:text-slate-300 transition-all animate-slide-up">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+                        <div class="flex space-x-2">
+                            <button class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                                📷
+                            </button>
+                            <!-- Gemini AI Magic Button -->
+                            <button onclick="parseWithAI()" id="ai-parse-btn" class="h-10 px-4 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50 flex items-center justify-center font-semibold text-xs text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 active:scale-95 transition-all">
+                                ✨ AI Auto-Fill
+                            </button>
+                        </div>
+                        <button onclick="postRFQ()" id="post-btn" class="bg-bb-blue text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-md shadow-blue-500/30 hover:bg-blue-700 active:scale-95 transition-all">
+                            Post RFQ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active RFQs List -->
+            <div>
+                <div class="flex justify-between items-center mb-3 px-1">
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">Recent Activity</h3>
+                    <span class="text-xs text-bb-blue dark:text-blue-400 font-semibold cursor-pointer">View All</span>
+                </div>
+                <div id="rfq-list" class="space-y-3">
+                    <!-- Static Active RFQ -->
+                    <div onclick="openBiddingRoom('REQ-8892', '500 Bags Cement (OPC 53)')" class="bg-white dark:bg-bb-cardDark p-4 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center cursor-pointer hover:border-bb-blue dark:hover:border-blue-500 transition-all active:scale-[0.98]">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg mr-3">
+                            🧱
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm text-slate-900 dark:text-white mb-0.5">500 Bags Cement (OPC 53)</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">📍 Noida Sec 62 • Today, 10:30 AM</p>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold px-2 py-1 rounded-md flex items-center border border-green-200 dark:border-green-800/50">
+                                <span class="live-dot bg-green-500 mr-1.5 w-1.5 h-1.5"></span> 3 Quotes
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Completed RFQ (To show different states) -->
+                    <div class="bg-white dark:bg-bb-cardDark p-4 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-center opacity-70">
+                        <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center text-lg mr-3">
+                            🏗️
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm text-slate-900 dark:text-white mb-0.5">10 Tonnes TMT Steel (Fe 500)</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">📍 Gurgaon • Yesterday</p>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700">
+                                Closed
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+
+        <!-- Bottom Navigation (Clean style) -->
+        <nav class="absolute bottom-0 w-full bg-white dark:bg-bb-cardDark border-t border-gray-200 dark:border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center z-20 transition-colors">
+            <div class="flex flex-col items-center text-bb-blue dark:text-blue-400 cursor-pointer active:scale-95 transition-transform">
+                <span class="text-xl mb-1">🏠</span>
+                <span class="text-[10px] font-bold">Home</span>
+            </div>
+            <div class="flex flex-col items-center text-slate-400 dark:text-slate-500 cursor-pointer hover:text-slate-600 dark:hover:text-slate-300 active:scale-95 transition-all">
+                <span class="text-xl mb-1">📋</span>
+                <span class="text-[10px] font-medium">Orders</span>
+            </div>
+            <div class="flex flex-col items-center text-slate-400 dark:text-slate-500 cursor-pointer hover:text-slate-600 dark:hover:text-slate-300 active:scale-95 transition-all">
+                <span class="text-xl mb-1">🏭</span>
+                <span class="text-[10px] font-medium">Vendors</span>
+            </div>
+            <div class="flex flex-col items-center text-slate-400 dark:text-slate-500 cursor-pointer hover:text-slate-600 dark:hover:text-slate-300 active:scale-95 transition-all">
+                <span class="text-xl mb-1">⚙️</span>
+                <span class="text-[10px] font-medium">Settings</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- VIEW 2: LIVE BIDDING ROOM -->
+    <div id="view-bidding" class="view relative z-20 bg-slate-50 dark:bg-bb-bgDark">
+        
+        <!-- Header -->
+        <header class="bg-white dark:bg-bb-cardDark px-5 pt-12 pb-4 flex items-center sticky top-0 z-30 border-b border-gray-200 dark:border-gray-800 transition-colors">
+            <button onclick="closeBiddingRoom()" class="w-9 h-9 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-full mr-3 active:scale-90 transition-all hover:bg-slate-200 dark:hover:bg-slate-700 border border-transparent dark:border-slate-700">
+                ←
+            </button>
+            <div class="flex-1">
+                <h1 class="text-sm font-bold text-slate-900 dark:text-white leading-tight" id="bidding-title">Requirement</h1>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5" id="bidding-id">ID: ---</p>
+            </div>
+            <!-- Pulse indicator in header -->
+            <div class="flex items-center bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-md border border-green-100 dark:border-green-800/50">
+                <span class="live-dot bg-green-500 mr-1.5 w-1.5 h-1.5"></span>
+                <span class="text-[9px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wide">Live</span>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto px-5 py-6 smooth-scroll">
+            
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Received Quotes</h3>
+                <button onclick="analyzeBidsWithAI()" id="ai-analyze-btn" class="bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-full font-bold text-[10px] active:scale-95 transition-all border border-amber-200 dark:border-amber-800/50 hidden flex items-center">
+                    <span class="mr-1 text-sm">✨</span> PBAT Analysis
+                </button>
+            </div>
+
+            <!-- AI Analysis Result Area -->
+            <div id="ai-analysis-result" class="hidden mb-5 p-4 bg-white dark:bg-bb-cardDark border border-amber-200 dark:border-amber-800/50 rounded-2xl text-sm text-slate-700 dark:text-slate-300 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-amber-400"></div>
+                <!-- Filled by JS -->
+            </div>
+
+            <!-- Skeleton Loaders -->
+            <div id="bidding-skeletons" class="space-y-3">
+                <div class="bg-white dark:bg-bb-cardDark rounded-2xl p-5 animate-pulse flex justify-between border border-gray-100 dark:border-gray-800 shadow-sm">
+                    <div class="space-y-3 w-1/2"><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div><div class="h-2 bg-slate-100 dark:bg-slate-800 rounded w-1/2"></div></div>
+                    <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+                </div>
+                <div class="bg-white dark:bg-bb-cardDark rounded-2xl p-5 animate-pulse flex justify-between border border-gray-100 dark:border-gray-800 shadow-sm" style="animation-delay: 0.2s;">
+                    <div class="space-y-3 w-1/2"><div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full"></div><div class="h-2 bg-slate-100 dark:bg-slate-800 rounded w-2/3"></div></div>
+                    <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+                </div>
+            </div>
+
+            <!-- Actual Bids -->
+            <div id="real-bids" class="space-y-4 hidden pb-10">
+                <!-- L1 Rank (Highlighted) -->
+                <div class="bg-white dark:bg-bb-cardDark rounded-2xl p-5 border-2 border-bb-blue dark:border-blue-500 shadow-md relative overflow-hidden transform transition-all hover:scale-[1.01]">
+                    <div class="absolute top-0 right-0 bg-bb-blue dark:bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl tracking-wide">L1 RANK</div>
+                    
+                    <div class="flex items-center mb-1 mt-1">
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-2xl tracking-tight">₹315</h4>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium ml-1">/ bag (Base)</span>
+                    </div>
+                    
+                    <div class="flex items-center text-xs text-slate-600 dark:text-slate-400 mb-4 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg">
+                        <span>🚚 Freight: ₹15/bag</span>
+                        <span class="mx-2 text-gray-300 dark:text-gray-600">|</span>
+                        <span class="text-green-600 dark:text-green-400 font-semibold flex items-center">
+                            <span class="mr-1">✓</span> Udyam Verified
+                        </span>
+                    </div>
+                    
+                    <button onclick="acceptBid('L1 - ₹315/bag')" class="w-full bg-slate-900 dark:bg-blue-600 text-white py-3 rounded-xl text-sm font-bold active:scale-[0.98] transition-all hover:bg-slate-800 dark:hover:bg-blue-700 shadow-sm">
+                        Accept Deal & Execute
+                    </button>
+                </div>
+
+                <!-- L2 Rank -->
+                <div class="bg-white dark:bg-bb-cardDark rounded-2xl p-4 border border-gray-200 dark:border-gray-800 shadow-sm opacity-80 hover:opacity-100 transition-opacity">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center">
+                            <h4 class="font-bold text-slate-700 dark:text-slate-200 text-lg">₹322</h4>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 ml-1">/ bag</span>
+                        </div>
+                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">L2</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">🚚 ₹18/bag Freight • Unverified</p>
+                </div>
+            </div>
+            
+            <!-- Dynamic Inject Area -->
+            <div id="new-bid-alert" class="mt-4 text-center hidden">
+                <span class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 text-bb-blue dark:text-blue-400 text-[10px] font-bold px-3 py-1.5 rounded-full animate-bounce inline-block tracking-wide shadow-sm">
+                    New Quote Arrived ↓
+                </span>
+            </div>
+        </main>
+    </div>
+
+    <!-- SUCCESS TOAST -->
+    <div id="toast" class="fixed top-14 left-1/2 transform -translate-x-1/2 bg-slate-800 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-full shadow-lg text-xs font-bold transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center">
+        <span class="mr-2">✅</span> <span id="toast-msg">Success</span>
+    </div>
+
+    <!-- BOTTOM SHEET MODAL (Clean Light/Dark) -->
+    <div id="modal-overlay" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity"></div>
+    <div id="bottom-sheet" class="fixed bottom-0 left-0 right-0 bg-white dark:bg-bb-cardDark border-t border-gray-200 dark:border-gray-800 rounded-t-3xl shadow-2xl z-50 transform translate-y-full transition-transform duration-300 max-w-480 mx-auto w-full p-6 pb-8">
+        <div class="w-12 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-6"></div>
+        
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-green-50 dark:bg-green-900/20 text-green-500 dark:text-green-400 border border-green-100 dark:border-green-800/50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                🤝
+            </div>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white mb-1">Deal Locked!</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">The manufacturer has been notified for execution.</p>
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 mb-6">
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest font-bold mb-2">Vendor Details</p>
+            <p class="font-bold text-slate-900 dark:text-white text-base">Apex Cement Industries</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">📞 +91 98765 43210</p>
+            <div class="mt-3 inline-flex items-center bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded border border-green-200 dark:border-green-800/50">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
+                <span class="text-[10px] text-green-700 dark:text-green-400 font-bold">Udyam Verified</span>
+            </div>
+        </div>
+
+        <button onclick="closeModal()" class="w-full bg-bb-blue text-white py-3.5 rounded-xl font-bold text-sm active:scale-[0.98] transition-transform shadow-md hover:bg-blue-700">
+            Acknowledge & Close
+        </button>
+    </div>
+
+</div>
+
+<!-- Application Logic & Gemini API -->
+<script>
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById('theme-icon');
+        
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            html.classList.add('light');
+            icon.innerText = '🌙';
+        } else {
+            html.classList.remove('light');
+            html.classList.add('dark');
+            icon.innerText = '☀️';
+        }
+    }
+
+    // --- GEMINI API INTEGRATION ---
+    const apiKey = ""; // Runtime provided
+    const model = "gemini-2.5-flash-preview-09-2025";
+    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    async function fetchWithRetry(url, options, retries = 5) {
+        const delays = [1000, 2000, 4000, 8000, 16000];
+        for (let i = 0; i < retries; i++) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                if (i === retries - 1) throw error;
+                await new Promise(res => setTimeout(res, delays[i]));
+            }
+        }
+    }
+
+    async function callGeminiAPI(prompt, systemPrompt, expectJson = false) {
+        const payload = { contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
+        if (expectJson) payload.generationConfig = { responseMimeType: "application/json" };
+        try {
+            const data = await fetchWithRetry(baseUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) { console.error("Gemini Error:", error); return null; }
+    }
+
+    // --- FEATURE 1: Smart RFQ Extractor ---
+    async function parseWithAI() {
+        const inputField = document.getElementById('rfq-input');
+        const text = inputField.value;
+        const btn = document.getElementById('ai-parse-btn');
+        
+        if(!text.trim()) { showToast("Pehle requirement likhiye."); return; }
+
+        btn.innerHTML = "<span class='animate-pulse text-indigo-500'>Processing...</span>";
+        btn.disabled = true;
+
+        const systemPrompt = "Data extraction bot for construction material. Output JSON only.";
+        const prompt = `Extract: item (material name), quantity, unit, and location. \nText: "${text}"\nOutput JSON: { "item": "string", "quantity": "number", "unit": "string", "location": "string" }`;
+        
+        const resultText = await callGeminiAPI(prompt, systemPrompt, true);
+        
+        if (resultText) {
+            try {
+                const data = JSON.parse(resultText);
+                const resultContainer = document.getElementById('ai-parsed-result');
+                resultContainer.innerHTML = `
+                    <p class="font-bold text-slate-800 dark:text-slate-200 mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">Structured Data</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <p><span class="text-slate-500 dark:text-slate-400">Material:</span> <strong class="text-slate-900 dark:text-white">${data.item || '-'}</strong></p>
+                        <p><span class="text-slate-500 dark:text-slate-400">Location:</span> <strong class="text-slate-900 dark:text-white">${data.location || '-'}</strong></p>
+                        <p class="col-span-2"><span class="text-slate-500 dark:text-slate-400">Qty:</span> <strong class="text-slate-900 dark:text-white">${data.quantity || ''} ${data.unit || ''}</strong></p>
+                    </div>
+                `;
+                resultContainer.classList.remove('hidden');
+                
+                const postBtn = document.getElementById('post-btn');
+                postBtn.innerHTML = "Deploy Request";
+                showToast("Data Structured by AI.");
+            } catch (e) { showToast("Failed to parse."); }
+        } else { showToast("Network Error."); }
+        
+        btn.innerHTML = "✨ AI Auto-Fill";
+        btn.disabled = false;
+    }
+
+    // --- FEATURE 2: PBAT AI Bid Analyzer ---
+    async function analyzeBidsWithAI() {
+        const btn = document.getElementById('ai-analyze-btn');
+        btn.innerHTML = "<span class='animate-pulse'>Analyzing...</span>";
+        btn.disabled = true;
+
+        const systemPrompt = "You are PBAT, an expert AI advisor for Indian construction. Analyze concisely in Hinglish.";
+        const prompt = "Evaluate bids for 500 bags cement in Noida. \nL1: ₹315 Base + ₹15 Freight. Udyam Verified.\nL2: ₹322 Base + ₹18 Freight. Unverified.\nGive 2 sentence strategic recommendation emphasizing landed cost.";
+        
+        const resultText = await callGeminiAPI(prompt, systemPrompt, false);
+
+        if (resultText) {
+            const resultContainer = document.getElementById('ai-analysis-result');
+            resultContainer.innerHTML = `
+                <p class="font-bold text-amber-700 dark:text-amber-400 mb-1 text-xs uppercase tracking-wider">PBAT Insight</p>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-medium text-sm">${resultText.replace(/\n/g, '<br/>')}</p>
+            `;
+            resultContainer.classList.remove('hidden');
+            resultContainer.classList.add('animate-slide-up');
+        } else { showToast("PBAT Offline."); }
+        
+        btn.innerHTML = "<span class='mr-1 text-sm'>✨</span> PBAT Analysis";
+        btn.disabled = false;
+    }
+
+    // --- UI State Logic ---
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-msg').innerText = message;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translate(-50%, 20px)';
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, -10px)'; }, 3000);
+    }
+
+    function postRFQ() {
+        const input = document.getElementById('rfq-input');
+        if(!input.value.trim()) { showToast("Enter requirement first."); return; }
+        
+        showToast("Requirement sent to manufacturers.");
+        const list = document.getElementById('rfq-list');
+        const newItem = document.createElement('div');
+        newItem.className = "bg-white dark:bg-bb-cardDark p-4 rounded-2xl border border-bb-blue dark:border-blue-500 shadow-sm flex items-center cursor-pointer animate-slide-up mt-3";
+        newItem.innerHTML = `
+            <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mr-3">⏱️</div>
+            <div class="flex-1">
+                <p class="font-bold text-sm text-slate-900 dark:text-white mb-0.5">Just Posted</p>
+                <p class="text-[11px] text-slate-500 truncate w-32">${input.value}</p>
+            </div>
+            <div class="flex flex-col items-end">
+                <span class="text-[10px] font-bold px-2 py-1 rounded-md text-bb-blue dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800/50">Routing...</span>
+            </div>
+        `;
+        list.prepend(newItem);
+        input.value = '';
+        document.getElementById('ai-parsed-result').classList.add('hidden');
+    }
+
+    function openBiddingRoom(id, title) {
+        document.getElementById('bidding-id').innerText = "ID: " + id;
+        document.getElementById('bidding-title').innerText = title;
+        document.getElementById('view-home').classList.remove('active');
+        document.getElementById('view-bidding').classList.add('active');
+
+        document.getElementById('bidding-skeletons').classList.remove('hidden');
+        document.getElementById('real-bids').classList.add('hidden');
+        document.getElementById('new-bid-alert').classList.add('hidden');
+        document.getElementById('ai-analyze-btn').classList.add('hidden');
+        document.getElementById('ai-analysis-result').classList.add('hidden');
+
+        setTimeout(() => {
+            document.getElementById('bidding-skeletons').classList.add('hidden');
+            document.getElementById('real-bids').classList.remove('hidden');
+            document.getElementById('ai-analyze-btn').classList.remove('hidden');
+            
+            setTimeout(() => { document.getElementById('new-bid-alert').classList.remove('hidden'); }, 2000);
+        }, 1200);
+    }
+
+    function closeBiddingRoom() {
+        document.getElementById('view-bidding').classList.remove('active');
+        document.getElementById('view-home').classList.add('active');
+    }
+
+    const modalOverlay = document.getElementById('modal-overlay');
+    const bottomSheet = document.getElementById('bottom-sheet');
+
+    function acceptBid(bidDetails) {
+        modalOverlay.classList.remove('hidden');
+        setTimeout(() => { modalOverlay.style.opacity = '1'; bottomSheet.style.transform = 'translateY(0)'; }, 10);
+    }
+
+    function closeModal() {
+        bottomSheet.style.transform = 'translateY(100%)';
+        modalOverlay.style.opacity = '0';
+        setTimeout(() => { modalOverlay.classList.add('hidden'); closeBiddingRoom(); showToast("Execution Commenced."); }, 300);
+    }
+</script>
+</body>
+</html>
