@@ -70,16 +70,19 @@ export interface Database {
           is_verified?: boolean;
         };
         Update: Partial<User>;
+        Relationships: [];
       };
       master_categories: {
         Row: MasterCategory;
         Insert: Omit<MasterCategory, "id"> & { id?: number };
         Update: Partial<MasterCategory>;
+        Relationships: [];
       };
       manufacturer_categories: {
         Row: ManufacturerCategory;
         Insert: ManufacturerCategory;
         Update: Partial<ManufacturerCategory>;
+        Relationships: [];
       };
       rfqs: {
         Row: Rfq;
@@ -89,6 +92,7 @@ export interface Database {
           status?: RfqStatus;
         };
         Update: Partial<Rfq>;
+        Relationships: [];
       };
       bids: {
         Row: Bid;
@@ -98,6 +102,7 @@ export interface Database {
           status?: BidStatus;
         };
         Update: Partial<Bid>;
+        Relationships: [];
       };
     };
   };

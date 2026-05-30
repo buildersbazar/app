@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { RegisterForm } from "./register-form";
 
 export const metadata: Metadata = {
   title: "Register — Builders Bazar",
@@ -29,86 +30,8 @@ export default function RegisterPage() {
             Join India&apos;s direct procurement platform
           </p>
 
-          {/* Role Selector */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <button
-              className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-accent
-                bg-accent-subtle text-accent text-sm font-medium transition-all"
-            >
-              <span className="text-2xl">🏗️</span>
-              Contractor
-            </button>
-            <button
-              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border
-                bg-bg-surface text-text-secondary text-sm font-medium transition-all
-                hover:border-border-hover hover:bg-bg-elevated"
-            >
-              <span className="text-2xl">🏭</span>
-              Manufacturer
-            </button>
-          </div>
-
-          {/* Placeholder Form */}
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="reg-company" className="block text-sm font-medium text-text-secondary mb-1.5">
-                Company Name
-              </label>
-              <input
-                id="reg-company"
-                type="text"
-                placeholder="Your Company Name"
-                className="w-full rounded-xl border border-border bg-bg-surface px-4 py-2.5 text-sm
-                  text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2
-                  focus:ring-ring focus:border-accent transition-all duration-200"
-              />
-            </div>
-            <div>
-              <label htmlFor="reg-email" className="block text-sm font-medium text-text-secondary mb-1.5">
-                Email
-              </label>
-              <input
-                id="reg-email"
-                type="email"
-                placeholder="you@company.com"
-                className="w-full rounded-xl border border-border bg-bg-surface px-4 py-2.5 text-sm
-                  text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2
-                  focus:ring-ring focus:border-accent transition-all duration-200"
-              />
-            </div>
-            <div>
-              <label htmlFor="reg-phone" className="block text-sm font-medium text-text-secondary mb-1.5">
-                Phone Number
-              </label>
-              <input
-                id="reg-phone"
-                type="tel"
-                placeholder="+91 98765 43210"
-                className="w-full rounded-xl border border-border bg-bg-surface px-4 py-2.5 text-sm
-                  text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2
-                  focus:ring-ring focus:border-accent transition-all duration-200"
-              />
-            </div>
-            <div>
-              <label htmlFor="reg-password" className="block text-sm font-medium text-text-secondary mb-1.5">
-                Password
-              </label>
-              <input
-                id="reg-password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full rounded-xl border border-border bg-bg-surface px-4 py-2.5 text-sm
-                  text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2
-                  focus:ring-ring focus:border-accent transition-all duration-200"
-              />
-            </div>
-            <button
-              className="w-full rounded-xl bg-accent text-white py-2.5 text-sm font-medium
-                hover:bg-accent-hover transition-colors duration-200 shadow-sm"
-            >
-              Create Account
-            </button>
-          </div>
+          {/* Role-based register form component */}
+          <RegisterForm />
 
           <p className="mt-6 text-center text-sm text-text-secondary">
             Already have an account?{" "}
