@@ -2,10 +2,10 @@ import { type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 /**
- * Root middleware for Next.js App Router.
+ * Root Proxy for Next.js App Router (Next.js 16+ convention).
  * Runs on every request matching our configured routes to keep sessions active and secure.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
 
